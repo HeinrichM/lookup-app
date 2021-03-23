@@ -14,7 +14,7 @@ class IPController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(IP $ipAddress = null)
+    public function index()
     {
         $lookupHistory = IP::latest()->paginate(50);
         return view('pages.ip.index', compact('lookupHistory','ipAddress'));
@@ -36,7 +36,7 @@ class IPController extends Controller
         // Check for error
         if(isset($ipAddress['error'])){
             // Return error
-            return redirect()->route('ip.index')->with('error',$ipAddress['reason']);
+            return redirect()->back()->with('error',$ipAddress['reason']);
         }
         // Check if ip address already exists in database
         $ipAddressDatabase = IP::where('ip',$request->ip)->first();
@@ -53,6 +53,7 @@ class IPController extends Controller
                 'org' => $ipAddress['org'],
                 'updated_at' => now(),
             ]);
+            $ipAddress = $ipAddressDatabase;
         }
         else {
             // Save ip information to database for future lookups
@@ -70,9 +71,20 @@ class IPController extends Controller
                 'org' => $ipAddress['org'],
             ]);
         }
-
         // Return ip address information
-        return redirect()->route('ip.index', ['ipAddress'=>$ipAddress]);
+        return redirect()->route('ip.show', ['ipAddress'=>$ipAddress->id]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param IP $ipAddress
+     * @return \Illuminate\Http\Response
+     */
+    public function show(IP $ipAddress)
+    {
+        $lookupHistory = IP::latest()->paginate(50);
+        return view('pages.ip.index', compact('lookupHistory','ipAddress'));
     }
 
     /**
@@ -84,7 +96,6 @@ class IPController extends Controller
      */
     public function update(Request $request, IP $ipAddress)
     {
-//        dd($ipAddress);
         if($ipAddress->status == 'Allowed'){
             $ipAddress->status = 0;
         } else {

@@ -27,11 +27,13 @@ require __DIR__.'/auth.php';
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/ip/{ipAddress?}',[IPController::class,'index'])->name('ip.index');
-    Route::post('/ip',[IPController::class,'store'])->name('ip.store');
+    Route::get('/ip',[IPController::class,'index'])->name('ip.index');
+    Route::get('/ip/{ipAddress}',[IPController::class,'show'])->name('ip.show');
     Route::get('/ip/{ipAddress}/toggle',[IPController::class,'update'])->name('ip.update');
+    Route::post('/ip',[IPController::class,'store'])->name('ip.store');
 
-    Route::get('/cellnumber/{cellNumber?}',[CellNumberController::class,'index'])->name('cellnumber.index');
+    Route::get('/cellnumber',[CellNumberController::class,'index'])->name('cellnumber.index');
+    Route::get('/cellnumber/{cellNumber}',[CellNumberController::class,'show'])->name('cellnumber.show');
     Route::post('/cellnumber',[CellNumberController::class,'store'])->name('cellnumber.store');
 
 });

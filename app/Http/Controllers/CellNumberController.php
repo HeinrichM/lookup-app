@@ -15,7 +15,6 @@ class CellNumberController extends Controller
      */
     public function index(Cellnumber $cellNumber = null)
     {
-//        $lookupHistory = Cellnumber::latest()->paginate(50);
         return view('pages.cellnumber.index', compact( 'cellNumber'));
     }
 
@@ -32,7 +31,7 @@ class CellNumberController extends Controller
         $cellNumber = Cellnumber::where('cell_number',$request->number)->first();
         if($cellNumber){
             // Return cell number information
-            return redirect()->route('cellnumber.index',['cellNumber'=>$cellNumber]);
+            return redirect()->route('cellnumber.show',['cellNumber'=>$cellNumber]);
         }
 
 
@@ -55,10 +54,21 @@ class CellNumberController extends Controller
                     'current_network' => $name,
                 ]);
                 // Return cell number information
-                return redirect()->route('cellnumber.index',['cellNumber'=>$cellNumber]);
+                return redirect()->route('cellnumber.show',['cellNumber'=>$cellNumber]);
             }
         }
         // Return no match found
-        return redirect()->route('cellnumber.index')->with('error','Cell number did not match any provider.');
+        return redirect()->route('cellnumber.show')->with('error','Cell number did not match any provider.');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param Cellnumber $cellNumber
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Cellnumber $cellNumber)
+    {
+        return view('pages.cellnumber.index', compact( 'cellNumber'));
     }
 }
