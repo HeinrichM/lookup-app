@@ -1,6 +1,6 @@
 ## Lookup app installation
 
-
+- Extract or clone the project from git into your apache environment
 - Copy .env.example to .env
 - Edit .env and add DB_DATABASE, DB_USERNAME, DB_PASSWORD details
 - Open CMD in the root of the project and run the following
